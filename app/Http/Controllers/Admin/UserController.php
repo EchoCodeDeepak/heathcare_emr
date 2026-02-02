@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Permission;
+use App\Services\PermissionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -124,18 +126,23 @@ class UserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role_id' => ['required', 'exists:roles,id'],
+            'permissions' => ['array'],
+            'permissions.*' => ['exists:permissions,id'],
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
         ]);
 
+        // Sync permissions if provided
+        if ($request->has('permissions') && !empty($request->permissions)) {
+            $user->role->permissions()->sync($request->permissions);
+        }
 
-
-        return redirect()->route('admin.users.index')->with('success', 'User created successfully!');
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully with permissions assigned!');
     }
 
     // Add these new methods for edit, update, and delete
@@ -208,4 +215,26 @@ class UserController extends Controller
 
     //     return redirect()->route('users.index')->with('success', 'User role updated successfully!');
     // }
+
+    /**
+     * Get permissions for a role (API endpoint for dynamic loading)
+     */
+    public function getPermissionsByRole(Request $request, PermissionService $permissionService)
+    {
+        $roleId = $request->get('role_id');
+        
+        if (!$roleId) {
+            return response()->json(['error' => 'Role ID is required'], 400);
+        }
+
+        $role = Role::findOrFail($roleId);
+        $permissionGroups = $permissionService->getPermissionGroups();
+        $permissions = Permission::all();
+
+        return response()->json([
+            'permissionGroups' => $permissionGroups,
+            'permissions' => $permissions,
+            'rolePermissions' => $role->permissions->pluck('id')->toArray()
+        ]);
+    }
 }

@@ -177,56 +177,7 @@ class MedicalRecordController extends Controller
     /**
      * Store a newly created medical record.
      */
-    // public function store(Request $request)
-    // {
-    //     $user = Auth::user();
 
-    //     // Allow doctors or users with the explicit permission to create records
-    //     if (!($user->hasPermission('create-medical-records') || $user->isDoctor())) {
-    //         return redirect()->route('medical-records.index')
-    //             ->with('error', 'You do not have permission to create medical records.');
-    //     }
-
-    //     try {
-    //         $validated = $request->validate([
-    //             'patient_id' => 'required|exists:users,id',
-    //             'medical_history' => 'nullable|string',
-    //             'diagnosis' => 'nullable|string',
-    //             'prescription' => 'nullable|string',
-    //             'lab_results' => 'nullable|string',
-    //             'blood_pressure' => 'nullable|string',
-    //             'temperature' => 'nullable|numeric',
-    //             'pulse_rate' => 'nullable|integer',
-    //             'weight' => 'nullable|numeric',
-    //             'height' => 'nullable|numeric',
-    //             'allergies' => 'nullable|string',
-    //             'notes' => 'nullable|string',
-    //             'visibility_level' => 'required|in:private,restricted,public',
-    //         ]);
-    //     } catch (\Illuminate\Validation\ValidationException $e) {
-    //         Log::warning('MedicalRecordController@store validation failed', [
-    //             'user_id' => $user->id ?? null,
-    //             'request' => $request->all(),
-    //             'errors' => $e->errors(),
-    //         ]);
-
-    //         throw $e;
-    //     }
-
-    //     $validated['doctor_id'] = $user->id;
-
-    //     // Create the record
-    //     $record = PatientMedicalRecord::create($validated);
-
-    //     // Log the creation (optional)
-    //     // activity()
-    //     //     ->causedBy($user)
-    //     //     ->performedOn($record)
-    //     //     ->log('created medical record');
-
-    //     return redirect()->route('medical-records.show', $record->id)
-    //         ->with('success', 'Medical record created successfully.');
-    // }
     public function store(Request $request)
     {
         $user = Auth::user();

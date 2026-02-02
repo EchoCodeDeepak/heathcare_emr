@@ -11,7 +11,18 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\LabResultController;
 
 Route::get('/', function () {
+    // If user is authenticated, redirect to dashboard
+    // Dashboard will handle role-based redirection
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+    // Show login form to guests
     return view('welcome');
+});
+
+// API Routes for Ajax calls
+Route::middleware('auth')->group(function () {
+    Route::get('/api/permissions', [AdminUserController::class, 'getPermissionsByRole']);
 });
 
 // Authentication Routes
