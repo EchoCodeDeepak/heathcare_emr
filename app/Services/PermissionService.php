@@ -10,26 +10,24 @@ class PermissionService
         'create-medical-records' => 'Create Medical Records',
         'edit-medical-records' => 'Edit Medical Records',
         'delete-medical-records' => 'Delete Medical Records',
-        
+        'view-all-medical-records' => 'View All Medical Records',
+
         // Lab Results
         'view-lab-results' => 'View Lab Results',
         'add-lab-results' => 'Add Lab Results',
         'edit-lab-results' => 'Edit Lab Results',
-        
-        // Prescriptions
-        'view-prescriptions' => 'View Prescriptions',
-        'add-prescriptions' => 'Add Prescriptions',
-        
+        'delete-lab-results' => 'Delete Lab Results',
+
         // Patient History
         'view-patient-history' => 'View Patient History',
-        
+
         // User Management
         'manage-users' => 'Manage Users',
         'manage-permissions' => 'Manage Permissions',
-        
+
         // Dashboard
         'view-dashboard' => 'View Dashboard',
-        
+
         // Reports
         'view-reports' => 'View Reports',
         'export-data' => 'Export Data',
@@ -51,18 +49,16 @@ class PermissionService
         return [
             'Medical Records' => [
                 'view-medical-records',
-                'create-medical-records', 
+                'view-all-medical-records',
+                'create-medical-records',
                 'edit-medical-records',
                 'delete-medical-records'
             ],
             'Lab Results' => [
                 'view-lab-results',
                 'add-lab-results',
-                'edit-lab-results'
-            ],
-            'Prescriptions' => [
-                'view-prescriptions',
-                'add-prescriptions'
+                'edit-lab-results',
+                'delete-lab-results'
             ],
             'Patient Management' => [
                 'view-patient-history'
@@ -92,8 +88,6 @@ class PermissionService
                 'edit-medical-records',
                 'view-lab-results',
                 'add-lab-results',
-                'view-prescriptions',
-                'add-prescriptions',
                 'view-patient-history',
                 'view-dashboard'
             ],
@@ -101,7 +95,6 @@ class PermissionService
                 'view-medical-records',
                 'edit-medical-records',
                 'view-lab-results',
-                'view-prescriptions',
                 'view-patient-history',
                 'view-dashboard'
             ],
@@ -114,7 +107,6 @@ class PermissionService
             'patient' => [
                 'view-medical-records',
                 'view-lab-results',
-                'view-prescriptions',
                 'view-dashboard'
             ]
         ];

@@ -113,13 +113,28 @@ class UserController extends Controller
     }
 
 
-    public function create()
+    public function create(Request $request, PermissionService $permissionService)
     {
-        $roles = Role::where('id', '!=', 1)->get();
-        return view('users.create', compact('roles'));
+        $type = $request->get('type', 'user'); // Default to user type
+        $allRoles = Role::where('id', '!=', 1)->get();
+        $permissionGroups = $permissionService->getPermissionGroups();
+        $allPermissions = Permission::all();
+        
+        return view('users.create', compact('type', 'allRoles', 'permissionGroups', 'allPermissions'));
     }
 
     public function store(Request $request)
+    {
+        $entityType = $request->get('entity_type', 'user');
+        
+        if ($entityType === 'role') {
+            return $this->storeRole($request);
+        } else {
+            return $this->storeUser($request);
+        }
+    }
+
+    private function storeUser(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -143,6 +158,28 @@ class UserController extends Controller
         }
 
         return redirect()->route('admin.users.index')->with('success', 'User created successfully with permissions assigned!');
+    }
+
+    private function storeRole(Request $request)
+    {
+        $request->validate([
+            'role_name' => 'required|string|max:255|unique:roles,name',
+            'slug' => 'required|string|max:255|unique:roles,slug',
+            'permissions' => ['array'],
+            'permissions.*' => ['exists:permissions,id'],
+        ]);
+
+        $role = Role::create([
+            'name' => $request->role_name,
+            'slug' => $request->slug,
+        ]);
+
+        // Sync permissions
+        if ($request->has('permissions') && !empty($request->permissions)) {
+            $role->permissions()->sync($request->permissions);
+        }
+
+        return redirect()->route('admin.users.index')->with('success', 'Role created successfully with permissions assigned!');
     }
 
     // Add these new methods for edit, update, and delete

@@ -6,33 +6,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Healthcare EMR') }}</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+    @auth
     <style>
+        :root {
+            --navbar-height: 56px;
+        }
+
         .navbar-brand {
             font-family: "Josefin Sans", sans-serif;
             font-optical-sizing: auto;
             font-weight: 500;
             font-style: normal;
         }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            padding-top: var(--navbar-height);
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav.navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--navbar-height);
+            z-index: 1030;
+            display: flex;
+            align-items: center;
+        }
+
+        main.authenticated {
+            flex: 1;
+            margin-left: 280px;
+            transition: margin-left 0.3s ease;
+        }
+
+        @media (max-width: 1199px) {
+            main.authenticated {
+                margin-left: 0;
+            }
+        }
+
+        .btn-toggle-sidebar {
+            background: none;
+            border: none;
+            color: #495057;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: none;
+        }
+
+        .btn-toggle-sidebar:hover {
+            color: #0d6efd;
+        }
+
+        @media (max-width: 1199px) {
+            .btn-toggle-sidebar {
+                display: block;
+            }
+        }
     </style>
-    @stack('styles')
+    @endauth
 
     <style>
-
         :root {
-            /* Easy height control */
             --banner-height-desktop: 100vh;
             --banner-height-tablet: 75vh;
             --banner-height-mobile: 60vh;
         }
 
-        /* Main banner wrapper */
         .banner-wrapper {
             position: relative;
             width: 100%;
@@ -40,11 +98,8 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* background-image: url('{{ asset(' images/banner.jpg') }}'); */
-            /* display: flex; */
         }
 
-        /* Overlay */
         .banner-overlay {
             position: absolute;
             inset: 0;
@@ -52,10 +107,8 @@
             align-items: center;
             justify-content: center;
             background: rgba(0, 0, 0, 0.25);
-            /* optional dark overlay */
         }
 
-        /* Content box */
         .overlay-box {
             background: rgba(0, 0, 0, 0.65);
             color: #fff;
@@ -64,10 +117,6 @@
             max-width: 720px;
             width: 90%;
         }
-
-        /* ===============================
-   RESPONSIVE HEIGHT CONTROL
-   =============================== */
 
         @media (max-width: 992px) {
             .banner-wrapper {
@@ -84,24 +133,38 @@
                 padding: 1.25rem 1.5rem;
             }
         }
+
+        /* Guest-only styles */
+        body.guest {
+            padding-top: 0;
+        }
+
+        body.guest #app {
+            min-height: 100vh;
+        }
     </style>
 
+    @stack('styles')
 
 </head>
 
-<body>
+<body class="{{ auth()->check() ? '' : 'guest' }}">
     <div id="app">
+        @auth
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container-fluid px-4">
-                <a class="navbar-brand  " href="{{ url('/') }}">
-                    <i class="fas fa-hospital "></i> Healthcare EMR
+                <button type="button" class="btn-toggle-sidebar" id="sidebarToggleBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    <i class="fas fa-hospital"></i> Healthcare EMR
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav me-auto d-lg-none">
                         @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('dashboard') }}">
@@ -117,13 +180,13 @@
                         @endif
                         @if(auth()->user()->isAdmin())
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('users.index') }}">
+                            <a class="nav-link" href="{{ route('admin.users.index') }}">
                                 <i class="fas fa-users"></i> Users
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('permissions.index') }}">
-                                <i class="fas fa-key"></i> Permissions
+                            <a class="nav-link" href="{{ route('admin.roles.index') }}">
+                                <i class="fas fa-shield-alt"></i> Roles
                             </a>
                         </li>
                         @endif
@@ -134,9 +197,6 @@
                         @guest
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                         </li>
                         @else
                         <li class="nav-item dropdown">
@@ -169,7 +229,13 @@
             </div>
         </nav>
 
-        <main class="py-0 ">
+        <!-- Responsive Sidebar -->
+        @auth
+        @include('layouts.sidebar')
+        @endauth
+        @endauth
+
+        <main class="{{ auth()->check() ? 'py-0 authenticated' : 'py-0' }}">
             @if(session('success'))
             <div class="container">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -191,14 +257,6 @@
             @yield('content')
         </main>
     </div>
-    <!-- <footer class="bg-dark text-white text-center py-3 mt-auto">
-        <div class="container">
-            <small>
-                © {{ date('Y') }} Healthcare EMR System | Secure Medical Records Management
-            </small>
-        </div>
-    </footer> -->
-
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

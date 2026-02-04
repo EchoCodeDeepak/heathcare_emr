@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <a href="{{ route('medical-records.index') }}" class="card-footer bg-transparent border-top text-white text-decoration-none">
-                    View Records <i class="fas fa-arrow-right"></i>
+                    View Medical Records <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         </div>
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{ route('permissions.index') }}" class="card-footer bg-transparent border-top text-white text-decoration-none">
+                <a href="{{ route('admin.roles.index') }}" class="card-footer bg-transparent border-top text-white text-decoration-none">
                     Manage Roles <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
@@ -105,8 +105,14 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 col-sm-6 mb-2">
-                            <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-block w-100">
-                                <i class="fas fa-user-plus"></i> Add New Role
+                            <a href="{{ route('admin.users.create', ['type' => 'user']) }}" class="btn btn-success btn-block w-100">
+                                <i class="fas fa-user-plus"></i> Create New User
+                            </a>
+                        </div>
+                        <!-- Create Role button removed: role creation is managed separately -->
+                        <div class="col-md-3 col-sm-6 mb-2">
+                            <a href="{{ route('admin.roles.index') }}" class="btn btn-warning btn-block w-100">
+                                <i class="fas fa-shield-alt"></i> Manage Roles
                             </a>
                         </div>
                         <div class="col-md-3 col-sm-6 mb-2">
@@ -115,13 +121,8 @@
                             </a>
                         </div>
                         <div class="col-md-3 col-sm-6 mb-2">
-                            <a href="{{ route('permissions.index') }}" class="btn btn-warning btn-block w-100">
-                                <i class="fas fa-cogs"></i> Manage Permissions
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-2">
-                            <a href="{{ route('medical-records.index') }}" class="btn btn-success btn-block w-100">
-                                <i class="fas fa-file-medical"></i> View Records
+                            <a href="{{ route('permissions.index') }}" class="btn btn-secondary btn-block w-100">
+                                <i class="fas fa-lock"></i> Permissions
                             </a>
                         </div>
                     </div>

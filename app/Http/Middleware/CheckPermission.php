@@ -20,7 +20,6 @@ class CheckPermission
 
         // Allow doctors to perform common medical-record actions without explicit
         // permission entries: they should be able to create/edit/delete records.
-        // This keeps admin-as-view-only behavior while enabling doctors' workflow.
         $doctorAllowed = ['create-medical-records', 'edit-medical-records', 'delete-medical-records', 'export-data'];
         if ($request->user()->isDoctor()) {
             foreach ($permissions as $permission) {
@@ -37,8 +36,7 @@ class CheckPermission
             }
         }
 
-        // Avoid redirecting back to dashboard (which may itself require this permission)
-        // Redirect to home with error or abort with 403 depending on context.
-        return redirect('/')->with('error', 'You do not have permission to access this page.');
+        // Permission denied - redirect to dashboard with error
+        return redirect('/dashboard')->with('error', 'You do not have permission to access this page. Please contact administrator.');
     }
 }

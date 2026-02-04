@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\LabResultController;
@@ -16,10 +17,9 @@ Route::get('/', function () {
     if (auth()->check()) {
         return redirect()->route('dashboard');
     }
-    // Show login form to guests
-    return view('welcome');
+    // Redirect guests to login
+    return redirect()->route('login');
 });
-
 // API Routes for Ajax calls
 Route::middleware('auth')->group(function () {
     Route::get('/api/permissions', [AdminUserController::class, 'getPermissionsByRole']);
@@ -41,10 +41,9 @@ Route::middleware('auth')->group(function () {
     // Logout
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-    // Dashboard - requires view-dashboard permission
+    // Dashboard - accessible by all authenticated users (role-based redirection)
     Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard')
-        ->middleware('permission:view-dashboard');
+        ->name('dashboard');
 
     // Medical Records Routes with permissions
     Route::prefix('medical-records')->name('medical-records.')->group(function () {
@@ -118,9 +117,29 @@ Route::middleware('auth')->group(function () {
             ->name('index')
             ->middleware('permission:view-lab-results');
 
+        Route::get('/create', [LabResultController::class, 'create'])
+            ->name('create')
+            ->middleware('permission:add-lab-results');
+
         Route::post('/', [LabResultController::class, 'store'])
             ->name('store')
             ->middleware('permission:add-lab-results');
+
+        Route::get('/{id}', [LabResultController::class, 'show'])
+            ->name('show')
+            ->middleware('permission:view-lab-results');
+
+        Route::get('/{id}/edit', [LabResultController::class, 'edit'])
+            ->name('edit')
+            ->middleware('permission:edit-lab-results');
+
+        Route::put('/{id}', [LabResultController::class, 'update'])
+            ->name('update')
+            ->middleware('permission:edit-lab-results');
+
+        Route::delete('/{id}', [LabResultController::class, 'destroy'])
+            ->name('destroy')
+            ->middleware('permission:delete-lab-results');
     });
 
     // Test route
@@ -130,13 +149,21 @@ Route::middleware('auth')->group(function () {
 
     // Admin Routes - Only for system-admin
     Route::middleware(['auth', 'role:system-admin'])->prefix('admin')->name('admin.')->group(function () {
-        // User Management
+        // User & Role Management (Unified)
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
         Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
         Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+
+        // Role Management (now also under admin, using same store method)
+        Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+        Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+        Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+        Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+        Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
 
         // Export routes
         Route::get('/users/export/pdf', [AdminUserController::class, 'exportPDF'])->name('users.export.pdf');
@@ -153,6 +180,14 @@ Route::middleware('auth')->group(function () {
             ->name('permissions.assign-user');
         Route::post('/permissions/assign/{user}', [PermissionController::class, 'storeUserPermissions'])
             ->name('permissions.store-user');
+    });
+
+    // Role Management Routes - DEPRECATED (use admin routes instead)
+    Route::middleware(['auth', 'permission:manage-permissions'])->group(function () {
+        // Redirect to admin role management
+        Route::get('/roles', function () {
+            return redirect()->route('admin.roles.index');
+        })->name('roles.index');
     });
 
     // User Management (for users with manage-users permission)

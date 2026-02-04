@@ -70,14 +70,42 @@
                     </div>
 
                     <div class="mb-3">
+                        @if(auth()->user()->hasPermission('manage-users'))
                         <a href="{{ route('admin.users.create') }}" class="btn btn-success">
                             <i class="fas fa-user-plus"></i> Add New User
                         </a>
+                        @endif
 
                         @if(request()->has('search') || request()->has('role'))
                         <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Clear Filters
                         </a>
+                        @endif
+
+                        @if(auth()->user()->hasPermission('export-data'))
+                        <div class="dropdown d-inline-block">
+                            <button class="btn btn-success dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.users.export.pdf') . '?' . http_build_query(request()->query()) }}">
+                                        <i class="fas fa-file-pdf text-danger"></i> Export as PDF
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.users.export.excel') . '?' . http_build_query(request()->query()) }}">
+                                        <i class="fas fa-file-excel text-success"></i> Export as Excel
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.users.export.csv') . '?' . http_build_query(request()->query()) }}">
+                                        <i class="fas fa-file-csv text-info"></i> Export as CSV
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                         @endif
                     </div>
 
@@ -153,21 +181,20 @@
                                     <td>
                                         @if($user->id != auth()->id())
                                         <div class="btn-group" role="group">
-                                            <!-- Change Role Button -->
-                                            <!-- <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#editRoleModal{{ $user->id }}">
-                                                <i class="fas fa-user-edit"></i> Role
-                                            </button> -->
-
                                             <!-- Update Button -->
-                                            <a href="{{ route('admin.users.edit', $user) }}" title="Edit"  class="btn btn-sm btn-warning me-1">
-                                                <i class="fas fa-edit"></i> 
+                                            @if(auth()->user()->hasPermission('manage-users'))
+                                            <a href="{{ route('admin.users.edit', $user) }}" title="Edit" class="btn btn-sm btn-warning me-1">
+                                                <i class="fas fa-edit"></i>
                                             </a>
+                                            @endif
 
                                             <!-- Delete Button -->
+                                            @if(auth()->user()->hasPermission('manage-users'))
                                             <button type="button" class="btn btn-sm btn-danger" title="Delete"
                                                 data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}">
-                                                <i class="fas fa-trash"></i> 
+                                                <i class="fas fa-trash"></i>
                                             </button>
+                                            @endif
                                         </div>
                                         @endif
                                     </td>
@@ -326,74 +353,74 @@
 
 @push('scripts')
 <script>
-$(document).ready(function() {
-    // Auto-submit search on enter (optional)
-    $('#searchForm input[name="search"]').on('keyup', function(e) {
-        if (e.keyCode === 13) { // Enter key
+    $(document).ready(function() {
+        // Auto-submit search on enter (optional)
+        $('#searchForm input[name="search"]').on('keyup', function(e) {
+            if (e.keyCode === 13) { // Enter key
+                $('#searchForm').submit();
+            }
+        });
+
+        // Clear search button
+        $('.btn-clear-search').on('click', function() {
+            $('#searchForm input[name="search"]').val('');
             $('#searchForm').submit();
-        }
-    });
+        });
 
-    // Clear search button
-    $('.btn-clear-search').on('click', function() {
-        $('#searchForm input[name="search"]').val('');
-        $('#searchForm').submit();
-    });
+        // Update role functionality
+        $(document).on('click', '.update-role', function() {
+            const userId = $(this).data('user-id');
+            const modalId = $(this).closest('.modal').attr('id');
+            const roleId = $(`#${modalId} select[name="role_id"]`).val();
 
-    // Update role functionality
-    $(document).on('click', '.update-role', function() {
-        const userId = $(this).data('user-id');
-        const modalId = $(this).closest('.modal').attr('id');
-        const roleId = $(`#${modalId} select[name="role_id"]`).val();
+            if (!roleId) {
+                toastr.error('Please select a role');
+                return;
+            }
 
-        if (!roleId) {
-            toastr.error('Please select a role');
-            return;
-        }
+            $.ajax({
+                url: '{{ url("users") }}/' + userId + '/role',
+                method: 'PUT',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    role_id: roleId
+                },
+                success: function(response) {
+                    toastr.success('Role updated!');
+                    location.reload();
+                },
+                error: function() {
+                    toastr.error('Error updating role');
+                }
+            });
+        });
 
-        $.ajax({
-            url: '{{ url("users") }}/' + userId + '/role',
-            method: 'PUT',
-            data: {
-                _token: '{{ csrf_token() }}',
-                role_id: roleId
-            },
-            success: function(response) {
-                toastr.success('Role updated!');
-                location.reload();
-            },
-            error: function() {
-                toastr.error('Error updating role');
+        // Delete confirmation with AJAX
+        $(document).on('submit', 'form[action*="users/"][method="DELETE"]', function(e) {
+            e.preventDefault();
+
+            const form = $(this);
+            const modal = form.closest('.modal');
+
+            if (confirm('Are you sure you want to delete this user?')) {
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(response) {
+                        toastr.success('User deleted successfully!');
+                        modal.modal('hide');
+                        location.reload(); // Reload to refresh pagination
+                    },
+                    error: function() {
+                        toastr.error('Error deleting user');
+                    }
+                });
             }
         });
     });
-
-    // Delete confirmation with AJAX
-    $(document).on('submit', 'form[action*="users/"][method="DELETE"]', function(e) {
-        e.preventDefault();
-        
-        const form = $(this);
-        const modal = form.closest('.modal');
-        
-        if (confirm('Are you sure you want to delete this user?')) {
-            $.ajax({
-                url: form.attr('action'),
-                method: 'DELETE',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                },
-                success: function(response) {
-                    toastr.success('User deleted successfully!');
-                    modal.modal('hide');
-                    location.reload(); // Reload to refresh pagination
-                },
-                error: function() {
-                    toastr.error('Error deleting user');
-                }
-            });
-        }
-    });
-});
 </script>
 <!-- <script>
     $(document).ready(function() {

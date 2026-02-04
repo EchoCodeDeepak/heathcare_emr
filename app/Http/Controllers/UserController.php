@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         $users = User::with('role')->paginate(10)->withQueryString();
         $roles = Role::all();
-        
+
         return view('users.index', compact('users', 'roles'));
     }
 
@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role_id' => ['required', 'exists:roles,id'],
         ]);
@@ -40,19 +40,20 @@ class UserController extends Controller
             'role_id' => $request->role_id,
         ]);
 
+
         return redirect()->route('users.index')->with('success', 'User created successfully!');
     }
 
     public function updateRole(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        
+
         $request->validate([
             'role_id' => 'required|exists:roles,id',
         ]);
-        
+
         $user->update(['role_id' => $request->role_id]);
-        
+
         return response()->json(['success' => true, 'message' => 'User role updated successfully.']);
     }
 }

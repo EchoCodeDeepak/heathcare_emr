@@ -14,23 +14,24 @@ class PermissionsSeeder extends Seeder
         $permissions = [
             // Dashboard
             ['name' => 'View Dashboard', 'slug' => 'view-dashboard'],
-            
+
             // Medical Records
             ['name' => 'View Medical Records', 'slug' => 'view-medical-records'],
+            ['name' => 'View All Medical Records', 'slug' => 'view-all-medical-records'],
             ['name' => 'Create Medical Records', 'slug' => 'create-medical-records'],
             ['name' => 'Edit Medical Records', 'slug' => 'edit-medical-records'],
             ['name' => 'Delete Medical Records', 'slug' => 'delete-medical-records'],
             ['name' => 'Manage Medical Records Permissions', 'slug' => 'manage-medical-records-permissions'],
-            
+
             // Lab Results
             ['name' => 'View Lab Results', 'slug' => 'view-lab-results'],
             ['name' => 'Add Lab Results', 'slug' => 'add-lab-results'],
             ['name' => 'Edit Lab Results', 'slug' => 'edit-lab-results'],
             ['name' => 'Delete Lab Results', 'slug' => 'delete-lab-results'],
-            
+
             // Data Export
             ['name' => 'Export Data', 'slug' => 'export-data'],
-            
+
             // Administrative
             ['name' => 'Manage Users', 'slug' => 'manage-users'],
             ['name' => 'Manage Permissions', 'slug' => 'manage-permissions'],
@@ -62,6 +63,7 @@ class PermissionsSeeder extends Seeder
         $adminPermissions = [
             'view-dashboard',
             'view-medical-records',
+            'view-all-medical-records',
             'create-medical-records',
             'edit-medical-records',
             'delete-medical-records',

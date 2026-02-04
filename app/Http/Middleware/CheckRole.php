@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class CheckRole
 {
     public function handle(Request $request, Closure $next, ...$roles)
@@ -16,23 +15,22 @@ class CheckRole
         }
 
         // Load the role relationship if not already loaded
-        $user = $request->user()->load('role');
+        $user = $request->user();
+        $role = $user->role;
 
-        if (!$user->role) {
-            return redirect('/dashboard')->with('error', 'User does not have a role assigned.');
+        if (!$role) {
+            return redirect('/login')->with('error', 'User does not have a role assigned. Please contact administrator.');
         }
 
-        $userRole = $user->role->slug;
+        $userRole = $role->slug ?? 'unknown';
 
+        // Check if user's role is in the allowed roles
         if (in_array($userRole, $roles)) {
             return $next($request);
         }
 
-        return redirect('/dashboard')->with('error', 'Unauthorized access.');
+        // For unknown roles not in the allowed list, check if they're custom roles
+        // that might have permissions for other routes - deny access
+        return redirect('/dashboard')->with('error', 'Unauthorized access. Your role does not have permission to access this resource.');
     }
-
-    // public function handle(Request $request, Closure $next): Response
-    // {
-    //     return $next($request);
-    // }
 }

@@ -46,6 +46,9 @@ class User extends Authenticatable
      */
     public function permissions()
     {
+        if (!$this->role) {
+            return collect([]);
+        }
         return $this->role->permissions();
     }
 

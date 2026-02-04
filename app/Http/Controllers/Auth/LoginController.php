@@ -49,18 +49,19 @@ class LoginController extends Controller
     {
         // Perform the standard authentication
         $this->validateLogin($request);
-        
+
         if ($this->guard()->attempt(
-            $this->credentials($request), $request->filled('remember')
+            $this->credentials($request),
+            $request->filled('remember')
         )) {
             // Login successful for any role
             $user = $this->guard()->user();
-            
+
             // Check if user has a role assigned
             if (!$user->role) {
                 // Logout user without role
                 $this->guard()->logout();
-                
+
                 return redirect()->back()
                     ->withInput($request->only($this->username(), 'remember'))
                     ->withErrors(['auth' => 'User role not assigned. Please contact administrator.']);
