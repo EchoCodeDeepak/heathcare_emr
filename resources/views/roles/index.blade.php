@@ -5,40 +5,38 @@
     <div class="row">
         <div class="col-md-12">
             <!-- Header Section -->
-            <div class="card bg-primary mb-4">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h3 class="text-white mb-0"><i class="fas fa-shield-alt"></i> Roles Management</h3>
-                        </div>
-                        <a href="{{ route('admin.roles.create') }}" class="btn btn-light">
-                            <i class="fas fa-plus-circle"></i> Add Role
-                        </a>
+            <div class="page-header mb-4">
+                <div class="d-flex justify-content-between align-items-center px-4">
+                    <div>
+                        <h3 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Roles Management</h3>
                     </div>
+                    <a href="{{ route('admin.roles.create') }}" class="btn btn-light">
+                        <i class="fas fa-plus-circle me-1"></i> Add Role
+                    </a>
                 </div>
             </div>
 
             <!-- Alerts -->
             @if($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="fas fa-check-circle"></i> {{ $message }}
+                <i class="fas fa-check-circle me-2"></i>{{ $message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif
 
             @if($message = Session::get('error'))
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif
 
             <!-- Main Content Card -->
-            <div class="card shadow-sm border-0">
+            <div class="card">
                 <!-- Info Alert -->
-                <div class="p-3">
-                    <div class="alert alert-info mb-0">
-                        <i class="fas fa-info-circle"></i>
+                <div class="p-3" style="background-color: var(--info-soft);">
+                    <div class="alert alert-info mb-0" style="background: transparent; border: none; color: #1e40af;">
+                        <i class="fas fa-info-circle me-2"></i>
                         <strong>Note:</strong> System Admin role is protected and cannot be modified. All other roles can be created, edited, or deleted.
                     </div>
                 </div>
@@ -52,7 +50,7 @@
                         </div>
                         <div class="col-md-3 text-end">
                             <button class="btn btn-primary" id="searchBtn">
-                                <i class="fas fa-search"></i> Search
+                                <i class="fas fa-search me-1"></i> Search
                             </button>
                         </div>
                     </div>
@@ -62,7 +60,7 @@
                 @if($roles->count() > 0)
                 <div class="table-responsive">
                     <table class="table table-striped table-hover mb-0">
-                        <thead class="table-light">
+                        <thead>
                             <tr>
                                 <th style="width: 25%;">Role Name</th>
                                 <th style="width: 20%;">Slug</th>
@@ -74,12 +72,12 @@
                             @foreach($roles as $role)
                             <tr>
                                 <td>
-                                    <span class="badge bg-primary fs-6">
+                                    <span class="badge badge-primary fs-6">
                                         {{ ucfirst(str_replace('-', ' ', $role->name)) }}
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="text-muted">
+                                    <span class="text-secondary">
                                         @if($role->slug === 'system-admin')
                                         Administrator
                                         @else
@@ -89,47 +87,47 @@
                                 </td>
                                 <td>
                                     @if($role->slug === 'system-admin')
-                                    <span class="badge bg-success fs-6">
-                                        <i class="fas fa-check-circle"></i> All Permissions
+                                    <span class="badge badge-success fs-6">
+                                        <i class="fas fa-check-circle me-1"></i> All Permissions
                                     </span>
                                     @else
                                     @if($role->permissions->count() > 0)
                                     <div class="d-flex flex-wrap gap-1">
                                         @foreach($role->permissions->take(4) as $permission)
-                                        <span class="badge bg-info text-dark fs-6">
+                                        <span class="badge badge-info fs-6">
                                             {{ str_replace('-', ' ', $permission->slug) }}
                                         </span>
                                         @endforeach
                                         @if($role->permissions->count() > 4)
-                                        <span class="badge bg-secondary fs-6">
+                                        <span class="badge badge-secondary fs-6">
                                             +{{ $role->permissions->count() - 4 }} more
                                         </span>
                                         @endif
                                     </div>
                                     @else
                                     <span class="text-muted small">
-                                        <i class="fas fa-ban"></i> No permissions
+                                        <i class="fas fa-ban me-1"></i> No permissions
                                     </span>
                                     @endif
                                     @endif
                                 </td>
                                 <td class="text-end">
                                     @if($role->slug !== 'system-admin')
-                                    <a href="{{ route('admin.roles.edit', $role) }}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-edit"></i> Edit
+                                    <a href="{{ route('admin.roles.edit', $role) }}" class="btn btn-sm btn-outline-primary" title="Edit Role" data-bs-toggle="tooltip">
+                                        <i class="fas fa-edit"></i>
                                     </a>
                                     @if($role->users()->count() === 0)
                                     <form method="POST" action="{{ route('admin.roles.destroy', $role) }}" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this role?')">
-                                            <i class="fas fa-trash"></i> Delete
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Are you sure you want to delete this role?')" title="Delete Role" data-bs-toggle="tooltip">
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                     @else
-                                    <button class="btn btn-sm btn-danger" disabled title="Cannot delete role with assigned users">
-                                        <i class="fas fa-trash"></i> Delete
+                                    <button class="btn btn-sm btn-outline-secondary" disabled title="Cannot delete role with assigned users" data-bs-toggle="tooltip">
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                     @endif
                                     @else

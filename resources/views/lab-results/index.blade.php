@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <div class="card-header  text-white d-flex justify-content-between align-items-center" style="background-color: #0891b2;">
                     <h4 class="mb-0">
                         <i class="fas fa-flask-vial"></i> Lab Results Management
                     </h4>
@@ -111,17 +111,17 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             @if(auth()->user()->hasPermission('view-lab-results'))
-                                            <a href="{{ route('lab-results.show', $record) }}" class="btn btn-sm btn-outline-info" title="View Details">
+                                            <a href="{{ route('lab-results.show', $record) }}" class="btn btn-sm btn-outline-primary" title="View Lab Result" data-bs-toggle="tooltip">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             @endif
                                             @if(auth()->user()->hasPermission('edit-lab-results'))
-                                            <a href="{{ route('lab-results.edit', $record) }}" class="btn btn-sm btn-outline-warning" title="Edit">
+                                            <a href="{{ route('lab-results.edit', $record) }}" class="btn btn-sm btn-outline-primary" title="Edit Lab Result" data-bs-toggle="tooltip">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             @endif
                                             @if(auth()->user()->hasPermission('delete-lab-results'))
-                                            <button type="button" class="btn btn-sm btn-outline-danger" title="Delete"
+                                            <button type="button" class="btn btn-sm btn-outline-danger" title="Delete Lab Result"
                                                 data-bs-toggle="modal" data-bs-target="#deleteModal{{ $record->id }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>

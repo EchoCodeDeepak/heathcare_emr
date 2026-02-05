@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header  text-white" style="background-color: #0891b2;">
                     <div class="d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">
                             <i class="fas fa-file-medical-alt"></i> Medical Records
@@ -408,7 +408,7 @@
                                     <th>Diagnosis</th>
                                     <th>
                                         <a href="{{ route('medical-records.index', array_merge(request()->query(), ['sort_by' => 'created_at', 'sort_order' => request('sort_by') == 'created_at' && request('sort_order') == 'asc' ? 'desc' : 'asc'])) }}"
-                                            class="text-decoration-none text-dark">
+                                            class="text-decoration-none text-white  ">
                                             Created At
                                             @if(request('sort_by') == 'created_at')
                                             <i class="fas fa-sort-{{ request('sort_order') == 'asc' ? 'up' : 'down' }}"></i>
@@ -504,11 +504,11 @@
                                             Auth::user()->hasPermission('view-all-medical-records') ||
                                             (Auth::user()->isAdmin() && Auth::user()->hasPermission('view-medical-records')))
                                             <a href="{{ route('medical-records.show', $record->id) }}"
-                                                class="btn btn-info" title="View" data-bs-toggle="tooltip">
+                                                class="btn btn-sm btn-outline-primary" title="View Record" data-bs-toggle="tooltip">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             @else
-                                            <button class="btn btn-info" disabled title="No access" data-bs-toggle="tooltip">
+                                            <button class="btn btn-sm btn-outline-secondary" disabled title="No access" data-bs-toggle="tooltip">
                                                 <i class="fas fa-eye-slash"></i>
                                             </button>
                                             @endif
@@ -518,7 +518,7 @@
                                             ($record->canUserEdit(Auth::id()) ||
                                             (Auth::user()->isDoctor() && $record->doctor_id == Auth::id())))
                                             <a href="{{ route('medical-records.edit', $record->id) }}"
-                                                class="btn btn-warning" title="Edit" data-bs-toggle="tooltip">
+                                                class="btn btn-sm btn-outline-primary" title="Edit Record" data-bs-toggle="tooltip">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             @endif
@@ -526,10 +526,10 @@
                                             <!-- Delete button - only doctors allowed to delete their records -->
                                             @if(Auth::user()->hasPermission('delete-medical-records') &&
                                             (Auth::user()->isDoctor() && $record->doctor_id == Auth::id()))
-                                            <button type="button" class="btn btn-danger"
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal{{ $record->id }}"
-                                                title="Delete" data-bs-toggle="tooltip">
+                                                title="Delete Record" data-bs-toggle="tooltip">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                             @endif
@@ -538,7 +538,7 @@
                                             @if(Auth::user()->hasPermission('manage-permissions') &&
                                             ((Auth::user()->isDoctor() && $record->doctor_id == Auth::id()) ||
                                             $record->patient_id == Auth::id()))
-                                            <button type="button" class="btn btn-secondary manage-permissions-btn"
+                                            <button type="button" class="btn btn-sm btn-outline-primary manage-permissions-btn"
                                                 data-record-id="{{ $record->id }}"
                                                 data-record-patient="{{ $record->patient->name }}"
                                                 title="Manage Access" data-bs-toggle="tooltip">

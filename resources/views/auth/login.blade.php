@@ -51,8 +51,8 @@
         }
 
         .login-header {
-            background: linear-gradient(135deg, #0d6efd 0%, #0aabf1 100%);
-            color: white;
+            /* background: linear-gradient(135deg, #0d6efd 0%, #0aabf1 100%); */
+            color: black;
             padding: 1.5rem;
             border-radius: 16px 16px 0 0;
         }

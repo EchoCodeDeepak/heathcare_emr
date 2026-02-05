@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header   text-white" style="background-color: #0891b2 ;">
                     <h4 class="mb-0">User Management</h4>
                 </div>
 
@@ -181,16 +181,16 @@
                                     <td>
                                         @if($user->id != auth()->id())
                                         <div class="btn-group" role="group">
-                                            <!-- Update Button -->
+                                            <!-- View Button -->
                                             @if(auth()->user()->hasPermission('manage-users'))
-                                            <a href="{{ route('admin.users.edit', $user) }}" title="Edit" class="btn btn-sm btn-warning me-1">
+                                            <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-outline-primary" title="Edit User" data-bs-toggle="tooltip">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             @endif
 
                                             <!-- Delete Button -->
                                             @if(auth()->user()->hasPermission('manage-users'))
-                                            <button type="button" class="btn btn-sm btn-danger" title="Delete"
+                                            <button type="button" class="btn btn-sm btn-outline-danger" title="Delete User"
                                                 data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>

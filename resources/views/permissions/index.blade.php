@@ -9,12 +9,12 @@
 </style>
 
 @section('content')
-<div class="container-fluid">
+<div class="container py-3 mt-4">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Role Permissions Management</h5>
+                <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #0891b2;">
+                    <h5 class="mb-0 text-light">Role Permissions Management</h5>
                     <a href="{{ route('users.index') }}" class="btn btn-sm btn-secondary">
                         <i class="fas fa-users"></i> Manage Users
                     </a>

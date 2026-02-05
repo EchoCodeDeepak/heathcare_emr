@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
 
     @auth
     <style>
@@ -63,23 +64,33 @@
         }
 
         .btn-toggle-sidebar {
-            background: none;
+            background: rgba(255, 255, 255, 0.15);
             border: none;
-            color: #495057;
+            color: #ffffff;
             font-size: 1.25rem;
             cursor: pointer;
-            padding: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
             display: none;
+            transition: all 0.2s ease;
         }
 
         .btn-toggle-sidebar:hover {
-            color: #0d6efd;
+            background: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
         }
 
         @media (max-width: 1199px) {
             .btn-toggle-sidebar {
                 display: block;
             }
+        }
+
+        .user-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50rem;
+            font-size: 0.85rem;
         }
     </style>
     @endauth
@@ -151,7 +162,7 @@
 <body class="{{ auth()->check() ? '' : 'guest' }}">
     <div id="app">
         @auth
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark">
             <div class="container-fluid px-4">
                 <button type="button" class="btn-toggle-sidebar" id="sidebarToggleBtn">
                     <i class="fas fa-bars"></i>
@@ -202,7 +213,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-user-circle"></i> {{ Auth::user()->name }}
-                                <span class="badge bg-primary">{{ Auth::user()->role->name }}</span>
+                                <span class="user-badge">{{ Auth::user()->role->name }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
@@ -261,6 +272,21 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- Initialize tooltips globally -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl, {
+                    trigger: 'hover focus',
+                    placement: 'top'
+                });
+            });
+        });
+    </script>
+
     @stack('scripts')
 </body>
 
