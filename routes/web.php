@@ -41,6 +41,15 @@ Route::middleware('auth')->group(function () {
     // Logout
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
+    // Profile Routes
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile.index');
+    Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/profile/image', [UserController::class, 'updateProfileImage'])->name('profile.image.update');
+
+    // Password Change Route
+    Route::get('/password/change', [UserController::class, 'showChangePasswordForm'])->name('password.change');
+    Route::put('/password/change', [UserController::class, 'changePassword'])->name('password.update');
+
     // Dashboard - accessible by all authenticated users (role-based redirection)
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');

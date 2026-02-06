@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -23,7 +25,7 @@ class DashboardController extends Controller
 
         switch ($roleSlug) {
             case 'system-admin':
-                return view('dashboard.admin');
+                return $this->adminDashboard();
             case 'doctor':
                 return view('dashboard.doctor');
             case 'nurse':
@@ -36,5 +38,20 @@ class DashboardController extends Controller
                 // Unknown/custom role - show the general dashboard
                 return view('dashboard.index');
         }
+    }
+
+    protected function adminDashboard()
+    {
+        // Prepare chart data for admin dashboard
+        $roles = Role::withCount('users')->get();
+        $roleLabels = $roles->pluck('name')->toArray();
+        $roleData = $roles->pluck('users_count')->toArray();
+        $roleColors = ['#0891b2', '#22c55e', '#f59e0b', '#3b82f6', '#ef4444', '#64748b'];
+
+        return view('dashboard.admin', compact(
+            'roleLabels',
+            'roleData',
+            'roleColors'
+        ));
     }
 }

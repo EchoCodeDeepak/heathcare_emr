@@ -12,20 +12,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --banner-height-desktop: 100vh;
-            --banner-height-tablet: 75vh;
-            --banner-height-mobile: 60vh;
+            --primary-500: #0891b2;
+            --primary-600: #0e7490;
+            --primary-700: #0b566e;
+            --success-500: #22c55e;
+            --success-600: #16a34a;
+            --warning-500: #f59e0b;
+            --warning-600: #d97706;
+            --info-500: #3b82f6;
+            --info-600: #2563eb;
+            --text-primary: #334155;
+            --text-secondary: #64748b;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
         }
 
         body {
-            font-family: "Josefin Sans", sans-serif;
+            font-family: var(--font-family);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: var(--text-primary);
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
         }
 
         .banner-wrapper {
@@ -41,37 +58,79 @@
             justify-content: center;
         }
 
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(55deg,
+                    rgb(52 84 180 / 88%) 0%,
+                    rgb(72 170 168 / 92%) 100%);
+        }
+
         .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 35px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            max-width: 450px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 420px;
             width: 90%;
+            position: relative;
+            z-index: 1;
         }
 
         .login-header {
-            /* background: linear-gradient(135deg, #0d6efd 0%, #0aabf1 100%); */
-            color: black;
+            color: var(--text-primary);
             padding: 1.5rem;
-            border-radius: 16px 16px 0 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .login-body {
+            padding: 1.5rem;
         }
 
         .login-footer {
-            background: #f8f9fa;
+            background: #f8fafc;
             padding: 1rem;
-            border-radius: 0 0 16px 16px;
+            border-top: 1px solid #e2e8f0;
+            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
         }
 
         .btn-login {
-            background: linear-gradient(135deg, #0d6efd 0%, #0aabf1 100%);
+            background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
             border: none;
             padding: 0.75rem 1.5rem;
             font-weight: 600;
+            color: white;
         }
 
         .btn-login:hover {
-            background: linear-gradient(135deg, #0aabf1 0%, #0d6efd 100%);
+            background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
+            color: white;
+        }
+
+        .form-control {
+            border-radius: var(--radius-lg);
+            border: 1px solid #e2e8f0;
+            padding: 0.625rem 0.875rem;
+            font-size: 0.875rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            margin-bottom: 0.375rem;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-500);
+            border-color: var(--primary-500);
         }
 
         @media (max-width: 576px) {
@@ -92,13 +151,14 @@
 
 <body>
     <div class="banner-wrapper">
-        <div class="login-card shadow-sm border-0 rounded-3 bg-white bg-opacity-75 backdrop-blur">
+        <div class="banner-overlay"></div>
+        <div class="login-card shadow-sm border-0">
             <!-- Header -->
             <div class="login-header text-center">
                 <h4 class="mb-0">
-                    <i class="fas fa-hospital"></i> Healthcare EMR
+                    <i class="fas fa-hospital" style="color: var(--primary-600);"></i> Healthcare EMR
                 </h4>
-                <small>Secure Medical Records System</small>
+                <small class="text-muted">Secure Medical Records System</small>
             </div>
 
             <!-- Body -->

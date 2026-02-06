@@ -1,16 +1,5 @@
-<!-- Responsive Sidebar Component -->
+<!-- Healthcare EMR Sidebar -->
 <nav id="sidebarNav" class="sidebar">
-    <!-- Sidebar Header -->
-    <div class="sidebar-header">
-        <div class="sidebar-brand">
-            <!-- <i class="fas fa-hospital"></i> -->
-            <!-- <span class="brand-text">Healthcare EMR</span> -->
-        </div>
-        <button type="button" class="btn-close-sidebar d-lg-none" id="closeSidebarBtn">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-
     <!-- Sidebar Navigation -->
     <ul class="sidebar-nav">
         @auth
@@ -50,8 +39,9 @@
 
         <!-- Admin Section -->
         @if(auth()->user()->isAdmin())
-        <li class="nav-divider"></li>
-        <li class="nav-title">Administration</li>
+        <li class="nav-section">
+            <div class="nav-section-title">Administration</div>
+        </li>
 
         <!-- User Management -->
         <li class="nav-item">
@@ -73,29 +63,16 @@
             </a>
         </li>
 
-        <!-- Permissions Management -->
-        <!-- <li class="nav-item">
-                <a class="nav-link {{ Route::is('permissions.*') ? 'active' : '' }}" href="{{ route('permissions.index') }}">
-                    <span class="nav-icon">
-                        <i class="fas fa-key"></i>
-                    </span>
-                    <span class="nav-text">Permissions</span>
-                </a>
-            </li> -->
+        <!-- Permissions -->
+        <li class="nav-item">
+            <a class="nav-link {{ Route::is('permissions.*') ? 'active' : '' }}" href="{{ route('permissions.index') }}">
+                <span class="nav-icon">
+                    <i class="fas fa-key"></i>
+                </span>
+                <span class="nav-text">Permissions</span>
+            </a>
+        </li>
         @endif
-
-        <!-- Divider -->
-        <li class="nav-divider"></li>
-
-        <!-- User Profile -->
-        <!-- <li class="nav-item">
-                <a class="nav-link" href="{{ route('dashboard') }}">
-                    <span class="nav-icon">
-                        <i class="fas fa-user-circle"></i>
-                    </span>
-                    <span class="nav-text">Profile</span>
-                </a>
-            </li> -->
 
         <!-- Logout -->
         <li class="nav-item">
@@ -112,371 +89,39 @@
         @endauth
     </ul>
 
-    <!-- Sidebar Footer -->
-    <div class="sidebar-footer" id="sidebarFooter">
-        @auth
+    <!-- Sidebar Footer (User Info) -->
+    <!-- @auth
+    <div class="sidebar-footer">
         <div class="user-info">
             <div class="user-avatar">
-                <i class="fas fa-user-circle"></i>
+                <i class="fas fa-user"></i>
             </div>
             <div class="user-details">
                 <div class="user-name">{{ Auth::user()->name }}</div>
                 <div class="user-role">{{ Auth::user()->role->name }}</div>
             </div>
         </div>
-        @endauth
     </div>
+    @endauth -->
 </nav>
 
 <!-- Sidebar Overlay (for mobile) -->
 <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
-<style>
-    /* ===================================
-       RESPONSIVE SIDEBAR STYLING
-       =================================== */
-    :root {
-        --sidebar-width: 280px;
-        --sidebar-width-collapsed: 80px;
-        --sidebar-bg: #ffffff;
-        --sidebar-border: #e2e8f0;
-        --nav-text-color: #6b7280;
-        --nav-active-color: #0891b2;
-        --nav-active-bg: #ecfeff;
-    }
-
-    /* Sidebar Container */
-    .sidebar {
-        position: fixed;
-        left: 0;
-        top: 56px;
-        width: var(--sidebar-width);
-        height: calc(100vh - 56px);
-        background-color: var(--sidebar-bg);
-        border-right: 1px solid var(--sidebar-border);
-        overflow-y: auto;
-        overflow-x: hidden;
-        z-index: 999;
-        transition: transform 0.3s ease, width 0.3s ease;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-    }
-
-    /* Sidebar Header */
-    .sidebar-header {
-        padding: 1.5rem 1rem;
-        border-bottom: 1px solid var(--sidebar-border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #0891b2;
-    }
-
-    .sidebar-brand {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-weight: 600;
-        color: #ffffff;
-        font-size: 1.1rem;
-    }
-
-    .sidebar-brand i {
-        font-size: 1.5rem;
-    }
-
-    .brand-text {
-        white-space: nowrap;
-    }
-
-    /* Close Button */
-    .btn-close-sidebar {
-        background: rgba(255, 255, 255, 0.15);
-        border: none;
-        color: #ffffff;
-        font-size: 1.5rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.375rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .btn-close-sidebar:hover {
-        background: rgba(255, 255, 255, 0.25);
-        color: #ffffff;
-    }
-
-    /* Sidebar Navigation */
-    .sidebar-nav {
-        list-style: none;
-        padding: 1rem 0;
-        margin: 0;
-    }
-
-    .sidebar-nav .nav-item {
-        margin: 0;
-    }
-
-    .sidebar-nav .nav-link {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem 1rem;
-        color: var(--nav-text-color);
-        text-decoration: none;
-        transition: all 0.2s ease;
-        border-left: 3px solid transparent;
-        margin: 0 0.5rem;
-        border-radius: 0.5rem;
-        font-weight: 500;
-    }
-
-    .sidebar-nav .nav-link:hover {
-        background-color: var(--nav-active-bg);
-        color: var(--nav-active-color);
-    }
-
-    .sidebar-nav .nav-link.active {
-        background-color: var(--nav-active-bg);
-        color: var(--nav-active-color);
-        border-left-color: var(--nav-active-color);
-    }
-
-    .sidebar-nav .nav-link.btn-logout {
-        background: none;
-        border: none;
-        cursor: pointer;
-        width: 100%;
-        text-align: left;
-    }
-
-    /* Nav Icons */
-    .nav-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 1.5rem;
-        color: currentColor;
-    }
-
-    .nav-text {
-        flex: 1;
-        white-space: nowrap;
-    }
-
-    /* Divider & Title */
-    .nav-divider {
-        height: 1px;
-        background-color: var(--sidebar-border);
-        margin: 1rem 1rem;
-        list-style: none;
-    }
-
-    .nav-title {
-        padding: 0.5rem 1rem;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        color: #9ca3af;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        list-style: none;
-    }
-
-    /* Sidebar Footer */
-    .sidebar-footer {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 1rem;
-        border-top: 1px solid var(--sidebar-border);
-        background-color: var(--sidebar-bg);
-    }
-
-    .user-info {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: var(--nav-active-bg);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        color: var(--nav-active-color);
-        flex-shrink: 0;
-    }
-
-    .user-details {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .user-name {
-        font-weight: 600;
-        color: #374151;
-        font-size: 0.9rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .user-role {
-        font-size: 0.75rem;
-        color: #9ca3af;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    /* Sidebar Overlay */
-    .sidebar-overlay {
-        display: none;
-        position: fixed;
-        top: 56px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 56px);
-        background-color: rgba(0, 0, 0, 0.3);
-        z-index: 998;
-    }
-
-    /* Scrollbar Styling */
-    .sidebar::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .sidebar::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .sidebar::-webkit-scrollbar-thumb {
-        background-color: #e2e8f0;
-        border-radius: 3px;
-    }
-
-    .sidebar::-webkit-scrollbar-thumb:hover {
-        background-color: #cbd5e1;
-    }
-
-    /* ===================================
-       TABLET & MOBILE RESPONSIVE
-       =================================== */
-
-    /* Tablet (768px - 1199px) */
-    @media (max-width: 1199px) {
-        .sidebar {
-            transform: translateX(-100%);
-        }
-
-        .sidebar.show {
-            transform: translateX(0);
-        }
-
-        .sidebar-overlay.show {
-            display: block;
-        }
-    }
-
-    /* Mobile (below 768px) */
-    @media (max-width: 767px) {
-        :root {
-            --sidebar-width: 250px;
-        }
-
-        .sidebar-header {
-            padding: 1.25rem 1rem;
-        }
-
-        .brand-text {
-            font-size: 0.95rem;
-        }
-
-        .sidebar-nav .nav-link {
-            padding: 0.75rem 0.875rem;
-            margin: 0 0.375rem;
-        }
-
-        .nav-icon {
-            width: 1.25rem;
-            font-size: 0.95rem;
-        }
-
-        .sidebar-footer {
-            position: relative;
-            margin-top: 1rem;
-        }
-    }
-
-    /* Desktop (1200px and above) */
-    @media (min-width: 1200px) {
-        .sidebar {
-            transform: translateX(0);
-        }
-
-        .btn-close-sidebar {
-            display: none !important;
-        }
-
-        .sidebar-overlay {
-            display: none !important;
-        }
-    }
-
-    /* Extra Small (below 576px) */
-    @media (max-width: 575px) {
-        :root {
-            --sidebar-width: 100%;
-        }
-
-        .sidebar {
-            width: 100% !important;
-            top: 56px;
-        }
-
-        .brand-text {
-            display: none;
-        }
-
-        .nav-text {
-            white-space: normal;
-        }
-
-        .sidebar-header {
-            padding: 1rem;
-            border-bottom: none;
-        }
-    }
-</style>
-
+<!-- Sidebar Toggle Script -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebarNav');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
         const toggleBtn = document.getElementById('sidebarToggleBtn');
-        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
 
-        // Toggle sidebar on button click
-        if (toggleBtn) {
+        if (toggleBtn && sidebar) {
             toggleBtn.addEventListener('click', function() {
                 sidebar.classList.toggle('show');
                 sidebarOverlay.classList.toggle('show');
             });
         }
 
-        // Close sidebar on close button click
-        if (closeSidebarBtn) {
-            closeSidebarBtn.addEventListener('click', function() {
-                sidebar.classList.remove('show');
-                sidebarOverlay.classList.remove('show');
-            });
-        }
-
-        // Close sidebar on overlay click
         if (sidebarOverlay) {
             sidebarOverlay.addEventListener('click', function() {
                 sidebar.classList.remove('show');
