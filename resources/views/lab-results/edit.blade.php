@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-warning text-dark">
+                <div class="card-header  text-dark">
                     <h4 class="mb-0">
                         <i class="fas fa-edit"></i> Edit Lab Result
                     </h4>
@@ -40,7 +40,7 @@
                                 </a>
                             </div>
                             <div class="col-md-6">
-                                <button type="submit" class="btn btn-warning w-100">
+                                <button type="submit" class="btn btn-primary w-100">
                                     <i class="fas fa-save"></i> Update Lab Result
                                 </button>
                             </div>

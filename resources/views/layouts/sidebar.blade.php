@@ -88,21 +88,79 @@
         </li>
         @endauth
     </ul>
+    <!-- Sidebar Footer (User Info) - Mobile Only -->
+    @auth
+    <li class="nav-item mobile-profile-section d-block d-lg-none">
 
-    <!-- Sidebar Footer (User Info) -->
-    <!-- @auth
-    <div class="sidebar-footer">
-        <div class="user-info">
-            <div class="user-avatar">
-                <i class="fas fa-user"></i>
-            </div>
-            <div class="user-details">
-                <div class="user-name">{{ Auth::user()->name }}</div>
-                <div class="user-role">{{ Auth::user()->role->name }}</div>
-            </div>
+        <!-- Profile Toggle -->
+        <a class="nav-link sidebar-profile-toggle d-flex align-items-center justify-content-between" href="#" data-bs-toggle="collapse" data-bs-target="#mobileProfileMenu">
+            <span class="d-flex align-items-center gap-3">
+                <div class="sidebar-profile-avatar">
+                    @if(auth()->user()->profile_image)
+                    <img src="{{ asset('storage/' . auth()->user()->profile_image) }}" alt="Profile" class="rounded-circle" width="36" height="36">
+                    @else
+                    <div class="avatar-placeholder rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 36px; height: 36px;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    @endif
+                </div>
+                <div class="sidebar-profile-info">
+                    <span class="sidebar-profile-name">{{ Auth::user()->name }}</span>
+                    <span class="sidebar-profile-role">{{ Auth::user()->role->name }}</span>
+                </div>
+            </span>
+            <i class="fas fa-chevron-down chevron-icon"></i>
+        </a>
+
+        <!-- Profile Dropdown -->
+        <div class="collapse" id="mobileProfileMenu">
+            <ul class="nav flex-column mobile-profile-menu">
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::is('profile.*') ? 'active' : '' }}" href="{{ route('profile.index') }}">
+                        <i class="fas fa-user-cog"></i>
+                        <span>My Profile</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::is('password.*') ? 'active' : '' }}" href="{{ route('password.change') }}">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Change Password</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::is('medical-records.*') ? 'active' : '' }}" href="{{ route('medical-records.index') }}">
+                        <i class="fas fa-file-medical-alt"></i>
+                        <span>Medical Records</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#helpSupportModal">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help & Support</span>
+                    </a>
+                </li>
+
+                <!-- <li class="nav-item mobile-logout">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="nav-link btn-logout-mobile">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </li> -->
+            </ul>
         </div>
-    </div>
-    @endauth -->
+
+    </li>
+    @endauth
+
+
+
+
 </nav>
 
 <!-- Sidebar Overlay (for mobile) -->

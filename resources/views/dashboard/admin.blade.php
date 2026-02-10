@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{ route('medical-records.index') }}" class="stat-card-footer px-3 py-2">
+                <a href="{{ route('medical-records.index') }}" class="stat-card-footer px-3 py-2 w-100">
                     View Medical Records <i class="fas fa-arrow-right"></i>
                 </a>
             </div>

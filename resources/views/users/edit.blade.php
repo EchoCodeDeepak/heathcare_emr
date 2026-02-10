@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header text-white">
                     <h4 class="mb-0">Edit User: {{ $user->name }}</h4>
                 </div>
 

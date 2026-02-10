@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header  text-white">
                     <h4 class="mb-0">
                         <i class="fas fa-plus"></i> Add Lab Result
                     </h4>

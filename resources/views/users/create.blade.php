@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-11">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header  text-white">
                     <h4 class="mb-0">
                         <i class="fas fa-user-plus"></i> Create New User
                     </h4>

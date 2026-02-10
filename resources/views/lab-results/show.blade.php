@@ -10,7 +10,7 @@
                         <i class="fas fa-eye"></i> Lab Result Details
                     </h4>
                     <div>
-                        <a href="{{ route('lab-results.edit', $record) }}" class="btn btn-warning btn-sm me-2">
+                        <a href="{{ route('lab-results.edit', $record) }}" class="btn btn-primary btn-sm me-2">
                             <i class="fas fa-edit"></i> Edit
                         </a>
                         <a href="{{ route('lab-results.index') }}" class="btn btn-secondary btn-sm">
@@ -101,7 +101,7 @@
                             </a>
                         </div>
                         <div class="col-md-4">
-                            <a href="{{ route('lab-results.edit', $record) }}" class="btn btn-warning w-100">
+                            <a href="{{ route('lab-results.edit', $record) }}" class="btn btn-primary w-100">
                                 <i class="fas fa-edit"></i> Edit Lab Result
                             </a>
                         </div>

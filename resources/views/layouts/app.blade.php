@@ -87,7 +87,7 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-md navbar-dark">
             <div class="container-fluid px-3">
-                <button type="button" class="btn-toggle-sidebar" id="sidebarToggleBtn">
+                <button type="button" class="btn-toggle-sidebar " id="sidebarToggleBtn">
                     <i class="fas fa-bars"></i>
                 </button>
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -97,7 +97,8 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
+                
+        <!--  -->
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto d-lg-none">
                         @auth
@@ -134,7 +135,7 @@
                             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                         </li>
                         @else
-                        <li class="nav-item dropdown profile-dropdown">
+                        <li class="nav-item dropdown profile-dropdown d-none d-lg-block ">
                             <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="profile-avatar">
                                     @if(auth()->user()->profile_image)
@@ -152,7 +153,7 @@
                                 <!-- User Info Header -->
                                 <li class="dropdown-header">
                                     <div class="d-flex align-items-center gap-3">
-                                        <div class="profile-avatar-lg">
+                                        <!-- <div class="profile-avatar-lg">
                                             @if(auth()->user()->profile_image)
                                             <img src="{{ asset('storage/' . auth()->user()->profile_image) }}" alt="Profile" class="rounded-circle" width="48" height="48">
                                             @else
@@ -160,7 +161,7 @@
                                                 <i class="fas fa-user fa-lg"></i>
                                             </div>
                                             @endif
-                                        </div>
+                                        </div> -->
                                         <div class="user-info-header">
                                             <h6 class="mb-0 text-dark">{{ Auth::user()->name }}</h6>
                                             <small class="text-muted">{{ Auth::user()->email }}</small>
@@ -234,6 +235,7 @@
                         @endguest
                     </ul>
                 </div>
+        <!--  -->
             </div>
         </nav>
 
